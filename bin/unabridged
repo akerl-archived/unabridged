@@ -1,0 +1,43 @@
+#!/usr/bin/env ruby
+
+require 'targit'
+require 'mercenary'
+
+def upload(file, repo, tag, options)
+  asset = Targit.new(file, repo, tag, options)
+  asset.upload!
+  puts "Successfully created asset! #{asset.url}"
+end
+
+Mercenary.program(:targit) do |p|
+  p.version Targit::VERSION
+  p.description 'Tool for adding GitHub release assets'
+  p.syntax 'targit [options] USER/REPO TAG /path/to/file'
+
+  # rubocop:disable Metrics/LineLength
+  p.option :force, '-f', '--force', 'Replace the asset if it already exists'
+  p.option :create, '-c', '--create', 'Create release if it does not exist'
+  p.option :release_name, '-r NAME', '--release NAME', 'Set the release name'
+  p.option :prerelease, '-p', '--prerelease', 'With -c, create as a dev release'
+  p.option :authfile, '-a FILE', '--authfile FILE', 'Set the auth files for GitHub credentials (comma-delimited)'
+  p.option :name, '-n NAME', '--name NAME', 'Set the name for the release asset'
+  # rubocop:enable Metrics/LineLength
+
+  p.action do |_, options|
+    repo, tag = ARGV.shift 2
+    if !repo || !tag
+      puts p
+    elsif !ARGV.empty?
+      ARGV.each { |file| raise("#{file} not found") unless File.exist? file }
+      ARGV.each do |file|
+        puts "Adding #{file} on #{tag} of #{repo}"
+        upload file, repo, tag, options
+      end
+    elsif !STDIN.tty?
+      raise('Name required if file is passed via STDIN') unless options[:name]
+      upload STDIN, repo, tag, options
+    else
+      puts p
+    end
+  end
+end
