@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.executables = ['unabridged']
 
   s.add_dependency 'mercenary', '~> 0.3.4'
-  s.add_dependency 'nokogiri', '~> 1.6.5'
+  s.add_dependency 'nokogiri', '~> 1.7.0'
   s.add_dependency 'curb', '~> 0.9.0'
 
   s.add_development_dependency 'rubocop', '~> 0.46.0'
