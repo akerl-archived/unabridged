@@ -1,4 +1,5 @@
-$:.unshift File.expand_path('../lib/', __FILE__)
+require 'English'
+$LOAD_PATH.unshift File.expand_path('../lib/', __FILE__)
 require 'unabridged/version'
 
 Gem::Specification.new do |s|
@@ -7,7 +8,7 @@ Gem::Specification.new do |s|
   s.date        = Time.now.strftime('%Y-%m-%d')
 
   s.summary     = 'Scraper for historical GitHub contribution data'
-  s.description = "Scraper for historical GitHub contribution data"
+  s.description = 'Scraper for historical GitHub contribution data'
   s.authors     = ['Les Aker']
   s.email       = 'me@lesaker.org'
   s.homepage    = 'https://github.com/akerl/unabridged'
